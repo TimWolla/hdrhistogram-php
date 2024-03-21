@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 5fbe3427017f38ed68370a73839239b4322c60ca */
+ * Stub hash: 3f62d360f36e085f4ce386f991487efd4a7dc608 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(arginfo_hdr_init, 0, 3, HdrHistogram\\Histogram, MAY_BE_FALSE)
 	ZEND_ARG_TYPE_INFO(0, lowest_trackable_value, IS_LONG, 0)
@@ -103,6 +103,28 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_HdrHistogram_Histogram___construct, 0, 0, 3
 	ZEND_ARG_TYPE_INFO(0, significant_figures, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_HdrHistogram_Histogram_recordValue, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_HdrHistogram_Histogram_recordValues, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_HdrHistogram_Histogram_getMin, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_HdrHistogram_Histogram_getMax arginfo_class_HdrHistogram_Histogram_getMin
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_HdrHistogram_Histogram_getCountAtValue, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_HdrHistogram_Histogram_getValueAtPercentile, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, percentile, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_HdrHistogram_Iterator___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, histogram, HdrHistogram\\Histogram, 0)
 ZEND_END_ARG_INFO()
@@ -134,6 +156,12 @@ ZEND_FUNCTION(hdr_import);
 ZEND_FUNCTION(hdr_base64_encode);
 ZEND_FUNCTION(hdr_base64_decode);
 ZEND_METHOD(HdrHistogram_Histogram, __construct);
+ZEND_METHOD(HdrHistogram_Histogram, recordValue);
+ZEND_METHOD(HdrHistogram_Histogram, recordValues);
+ZEND_METHOD(HdrHistogram_Histogram, getMin);
+ZEND_METHOD(HdrHistogram_Histogram, getMax);
+ZEND_METHOD(HdrHistogram_Histogram, getCountAtValue);
+ZEND_METHOD(HdrHistogram_Histogram, getValueAtPercentile);
 ZEND_METHOD(HdrHistogram_Iterator, __construct);
 ZEND_METHOD(HdrHistogram_Iterator_Percentile, __construct);
 
@@ -168,6 +196,12 @@ static const zend_function_entry ext_functions[] = {
 
 static const zend_function_entry class_HdrHistogram_Histogram_methods[] = {
 	ZEND_ME(HdrHistogram_Histogram, __construct, arginfo_class_HdrHistogram_Histogram___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, recordValue, arginfo_class_HdrHistogram_Histogram_recordValue, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, recordValues, arginfo_class_HdrHistogram_Histogram_recordValues, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, getMin, arginfo_class_HdrHistogram_Histogram_getMin, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, getMax, arginfo_class_HdrHistogram_Histogram_getMax, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, getCountAtValue, arginfo_class_HdrHistogram_Histogram_getCountAtValue, ZEND_ACC_PUBLIC)
+	ZEND_ME(HdrHistogram_Histogram, getValueAtPercentile, arginfo_class_HdrHistogram_Histogram_getValueAtPercentile, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 

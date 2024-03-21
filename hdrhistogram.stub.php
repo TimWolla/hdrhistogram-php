@@ -60,6 +60,18 @@ namespace HdrHistogram {
      */
     final class Histogram {
         public function __construct(int $lowest_trackable_value, int $highest_trackable_value, int $significant_figures) { }
+
+        public function recordValue(int $value): void { }
+
+        public function recordValues(int $value, int $count): void { }
+
+        public function getMin(): int { }
+
+        public function getMax(): int { }
+
+        public function getCountAtValue(int $value): int { }
+
+        public function getValueAtPercentile(float $percentile): int { }
     }
 
     /**

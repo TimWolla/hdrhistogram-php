@@ -311,6 +311,16 @@ PHP_FUNCTION(hdr_stddev)
     RETURN_DOUBLE(hdr_stddev(hdr));
 }
 
+ZEND_METHOD(HdrHistogram_Histogram, getMin)
+{
+    struct hdr_histogram *hdr;
+
+    ZEND_PARSE_PARAMETERS_NONE();
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    RETURN_LONG(hdr_min(hdr));
+}
 
 PHP_FUNCTION(hdr_min)
 {
@@ -324,6 +334,17 @@ PHP_FUNCTION(hdr_min)
     hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(zhdr))->histogram;
 
     RETURN_LONG(hdr_min(hdr));
+}
+
+ZEND_METHOD(HdrHistogram_Histogram, getMax)
+{
+    struct hdr_histogram *hdr;
+
+    ZEND_PARSE_PARAMETERS_NONE();
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    RETURN_LONG(hdr_max(hdr));
 }
 
 PHP_FUNCTION(hdr_max)
@@ -354,6 +375,32 @@ PHP_FUNCTION(hdr_total_count)
     RETURN_LONG(hdr->total_count);
 }
 
+ZEND_METHOD(HdrHistogram_Histogram, recordValue)
+{
+    struct hdr_histogram *hdr;
+    zend_long value;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_LONG(value);
+    ZEND_PARSE_PARAMETERS_END();
+
+    if (value < 0) {
+#if PHP_VERSION_ID >= 80000
+        zend_argument_value_error(1, "must be greater than or equal to 0");
+#else
+        zend_throw_exception_ex(NULL, 0, "%s(): Argument #%d ($%s) must be greater than or equal to 0", "HdrHistogram\\Histogram::recordValue", 1, "value");
+#endif
+        return;
+    }
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    if (!hdr_record_value(hdr, value)) {
+        zend_throw_error(zend_ce_error, "Failed to record value.");
+        return;
+    }
+}
+
 PHP_FUNCTION(hdr_record_value)
 {
     struct hdr_histogram *hdr;
@@ -372,6 +419,34 @@ PHP_FUNCTION(hdr_record_value)
     }
 
     RETURN_TRUE;
+}
+
+ZEND_METHOD(HdrHistogram_Histogram, recordValues)
+{
+    struct hdr_histogram *hdr;
+    zend_long value;
+    zend_long count;
+
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_LONG(value);
+        Z_PARAM_LONG(count);
+    ZEND_PARSE_PARAMETERS_END();
+
+    if (value < 0) {
+#if PHP_VERSION_ID >= 80000
+        zend_argument_value_error(1, "must be greater than or equal to 0");
+#else
+        zend_throw_exception_ex(NULL, 0, "%s(): Argument #%d ($%s) must be greater than or equal to 0", "HdrHistogram\\Histogram::recordValues", 1, "value");
+#endif
+        return;
+    }
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    if (!hdr_record_values(hdr, value, count) == 0) {
+        zend_throw_error(zend_ce_error, "Failed to record value.");
+        return;
+    }
 }
 
 PHP_FUNCTION(hdr_record_values)
@@ -432,6 +507,20 @@ PHP_FUNCTION(hdr_reset)
     hdr_reset(hdr);
 }
 
+ZEND_METHOD(HdrHistogram_Histogram, getCountAtValue)
+{
+    struct hdr_histogram *hdr;
+    zend_long value;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_LONG(value);
+    ZEND_PARSE_PARAMETERS_END();
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    RETURN_LONG(hdr_count_at_value(hdr, value));
+}
+
 PHP_FUNCTION(hdr_count_at_value)
 {
     struct hdr_histogram *hdr;
@@ -446,6 +535,29 @@ PHP_FUNCTION(hdr_count_at_value)
     hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(zhdr))->histogram;
 
     RETURN_LONG(hdr_count_at_value(hdr, value));
+}
+
+ZEND_METHOD(HdrHistogram_Histogram, getValueAtPercentile)
+{
+    struct hdr_histogram *hdr;
+    double percentile;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_DOUBLE(percentile);
+    ZEND_PARSE_PARAMETERS_END();
+
+    if (percentile < 0 || percentile > 100) {
+#if PHP_VERSION_ID >= 80000
+        zend_argument_value_error(1, "must be between 0.0 and 100.0");
+#else
+        zend_throw_exception_ex(NULL, 0, "%s(): Argument #%d ($%s) must be between 0.0 and 100.0", "HdrHistogram\\Histogram::getValueAtPercentile", 1, "percentile");
+#endif
+        return;
+    }
+
+    hdr = php_hdrhistogram_histogram_from_object(Z_OBJ_P(getThis()))->histogram;
+
+    RETURN_LONG(hdr_value_at_percentile(hdr, percentile));
 }
 
 PHP_FUNCTION(hdr_value_at_percentile)
